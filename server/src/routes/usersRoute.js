@@ -1,12 +1,13 @@
 import { Router } from "express";
-const asyncHandler = require("express-async-handler");
+// const asyncHandler = require("express-async-handler");
+import asyncHandler from "express-async-handler";
 
 const usersRouter = Router();
 
-router.post("/", asyncHandler());
+usersRouter.post("/", asyncHandler());
 
-router.post("/login", asyncHandler());
+usersRouter.post("/login", asyncHandler());
 
-router.get("/me", asyncHandler());
+usersRouter.get("/me", asyncHandler());
 
 export default usersRouter;
