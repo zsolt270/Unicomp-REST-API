@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/dbConnection.js";
 import usersRouter from "./routes/usersRoute.js";
 import booksRouter from "./routes/booksRoute.js";
+import errorHandler from "./middleware/errorHandler.js";
 
 dotenv.config();
 connectDB();
@@ -18,6 +19,8 @@ app.use("/books", booksRouter);
 app.use("*", (req, res) => {
   res.json({ message: "Route was not found" });
 });
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`The server is listening on ${PORT}`);
