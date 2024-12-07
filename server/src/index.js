@@ -15,6 +15,10 @@ app.use("/users", usersRouter);
 
 app.use("/books", booksRouter);
 
+app.use("*", (req, res) => {
+  res.json({ message: "Route was not found" });
+});
+
 app.listen(PORT, () => {
   console.log(`The server is listening on ${PORT}`);
 });
