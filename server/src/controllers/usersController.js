@@ -1,5 +1,6 @@
 import Users from "../model/usersModel.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export default class User {
   async signUp(req, res) {
@@ -28,7 +29,7 @@ export default class User {
       throw new Error("Something went wrong!");
     }
 
-    res.status(201).json(user);
+    res.status(201).json({ message: "Successful Sign Up!" });
   }
 
   async logIn(req, res) {
@@ -36,9 +37,16 @@ export default class User {
 
     if (!user) {
       res.status(404);
-      throw new Error("Username wasnt found");
+      throw new Error("Username wasn't found");
     }
 
-    res.status(200).json(user);
+    if (!(await bcrypt.compare(req.body.password, user.password))) {
+      res.status(401);
+      throw new Error("Not Allowed!");
+    }
+
+    const accessToken = jwt.sign({ uname: req.body.username }, process.env.PRIVATE_JWT_KEY);
+
+    res.status(200).json({ message: "Logged In!", token: accessToken });
   }
 }
