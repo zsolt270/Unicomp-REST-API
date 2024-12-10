@@ -51,6 +51,13 @@ export default class User {
   }
 
   async getUserDetails(req, res) {
-    res.json(req.uname);
+    const userDetails = await Users.findOne({ username: req.user.uname });
+
+    if (!userDetails) {
+      res.status(500);
+      throw new Error("Something went wrong!");
+    }
+
+    res.json(userDetails);
   }
 }

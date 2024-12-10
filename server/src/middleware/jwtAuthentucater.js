@@ -14,7 +14,7 @@ const jwtAuthenticator = (req, res, next) => {
       res.status(403);
       throw new Error("Not Allowed!");
     }
-    req.uname = uname;
+    req.user = uname;
     next();
   });
 };
