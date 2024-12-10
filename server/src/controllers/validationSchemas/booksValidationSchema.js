@@ -23,3 +23,13 @@ export const newBookValidation = [
     .withMessage("The books description must be at least 5 character long!")
     .escape(),
 ];
+
+export const updateBookValidation = [
+  body("title").isString().escape(),
+  body("author").isString().escape(),
+  body("genre").isString().escape(),
+  body("description")
+    .isLength({ min: 5 })
+    .withMessage("The books description must be at least 5 character long!")
+    .escape(),
+];

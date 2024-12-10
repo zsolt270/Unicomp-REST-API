@@ -1,6 +1,9 @@
 import { Router } from "express";
 import asyncHandler from "express-async-handler";
-import { newBookValidation } from "../controllers/validationSchemas/booksValidationSchema.js";
+import {
+  newBookValidation,
+  updateBookValidation,
+} from "../controllers/validationSchemas/booksValidationSchema.js";
 import { requestValidator } from "../middleware/requestValidator.js";
 import Book from "../controllers/booksController.js";
 // import User from "../controllers/usersController";
@@ -16,7 +19,7 @@ booksRouter.get("/:id", asyncHandler(book.getBookById));
 
 booksRouter.post("/", newBookValidation, requestValidator, asyncHandler(book.createBook));
 
-booksRouter.patch("/:id", asyncHandler());
+booksRouter.patch("/:id", updateBookValidation, requestValidator, asyncHandler(book.updateBook));
 
 booksRouter.delete("/:id", asyncHandler());
 

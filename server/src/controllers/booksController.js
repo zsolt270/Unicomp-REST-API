@@ -46,4 +46,6 @@ export default class Book {
     res.status(200);
     res.json(book);
   }
+
+  async updateBook(req, res) {}
 }
