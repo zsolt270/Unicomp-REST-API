@@ -3,7 +3,10 @@ import bcrypt from "bcrypt";
 
 export default class User {
   async signUp(req, res) {
-    console.log(req.body);
+    if (Users.find({ username: req.body.username })) {
+      res.status(400);
+      throw new Error("The given username already exits!");
+    }
 
     const salt = await bcrypt.genSalt();
     const securedPwd = await bcrypt.hash(req.body.password, salt);
