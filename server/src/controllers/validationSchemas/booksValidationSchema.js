@@ -18,6 +18,7 @@ export const newBookValidation = [
     .escape(),
   body("description")
     .exists({ values: "falsy" })
+    .withMessage("Please enter the books description!")
     .isLength({ min: 5 })
     .withMessage("The books description must be at least 5 character long!")
     .escape(),
