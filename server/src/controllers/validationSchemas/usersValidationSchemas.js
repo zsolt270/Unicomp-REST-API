@@ -32,3 +32,16 @@ export const signUpValidation = [
     .withMessage("The password and its confirmation do not match!")
     .escape(),
 ];
+
+export const logInValidation = [
+  body("username")
+    .exists({ values: "falsy" })
+    .withMessage("Please enter a username!")
+    .isString()
+    .escape(),
+  body("password")
+    .exists({ values: "falsy" })
+    .withMessage("Please enter a password!")
+    .isString()
+    .escape(),
+];

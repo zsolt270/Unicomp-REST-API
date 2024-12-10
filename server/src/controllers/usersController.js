@@ -27,4 +27,15 @@ export default class User {
 
     res.status(201).json(user);
   }
+
+  async logIn(req, res) {
+    const user = await Users.findOne({ username: req.body.username });
+
+    if (!user) {
+      res.status(404);
+      throw new Error("Username wasnt found");
+    }
+
+    res.status(200).json(user);
+  }
 }
