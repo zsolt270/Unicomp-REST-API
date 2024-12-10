@@ -10,7 +10,7 @@ const booksRouter = Router();
 const book = new Book();
 
 //Books specific routes
-booksRouter.get("/", asyncHandler());
+booksRouter.get("/", asyncHandler(book.getBooks));
 
 booksRouter.get("/:id", asyncHandler());
 

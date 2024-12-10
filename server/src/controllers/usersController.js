@@ -59,6 +59,7 @@ export default class User {
       throw new Error("Something went wrong!");
     }
 
+    res.status(200);
     res.json(userDetails);
   }
 }

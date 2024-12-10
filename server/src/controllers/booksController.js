@@ -19,6 +19,19 @@ export default class Book {
       throw new Error("Something went wrong!");
     }
 
+    res.status(201);
     res.json({ message: "The Books was created!" });
+  }
+
+  async getBooks(req, res) {
+    const allBooks = await Books.find();
+
+    if (!allBooks) {
+      res.status(500);
+      throw new Error("Something went wrong!");
+    }
+
+    res.status(200);
+    res.json(allBooks);
   }
 }
