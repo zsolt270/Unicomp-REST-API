@@ -8,7 +8,7 @@ import errorHandler from "./middleware/errorHandler.js";
 dotenv.config();
 connectDB();
 const app = express();
-const PORT = process.env.PORT || 3003;
+const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
 
