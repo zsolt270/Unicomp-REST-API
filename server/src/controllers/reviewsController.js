@@ -39,6 +39,19 @@ export default class Review {
       throw new Error("Something went wrong!");
     }
 
+    res.status(201);
     res.json({ message: "Review was successfully created!" });
+  }
+
+  async getBookReviews(req, res) {
+    const reviews = await Reviews.find({ bookid: req.params.bookId });
+
+    if (!reviews) {
+      res.status(404);
+      throw new Error("There wasn't a book with the given id!");
+    }
+
+    res.status(200);
+    res.json(reviews);
   }
 }
