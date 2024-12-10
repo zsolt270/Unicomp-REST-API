@@ -20,7 +20,7 @@ export default class Book {
     }
 
     res.status(201);
-    res.json({ message: "The Books was created!" });
+    res.json({ message: "The book was created!" });
   }
 
   async getBooks(req, res) {
@@ -47,5 +47,20 @@ export default class Book {
     res.json(book);
   }
 
-  async updateBook(req, res) {}
+  async updateBook(req, res) {
+    if (await Books.findOne({ title: req.body.title })) {
+      res.status(400);
+      throw new Error("A book with this name already exists!");
+    }
+
+    const updatedBook = await Books.findByIdAndUpdate(req.params.id, req.body);
+
+    if (!updatedBook) {
+      res.status(404);
+      throw new Error("Book with the given id not found!");
+    }
+
+    res.status(200);
+    res.json({ message: "The update was successful!" });
+  }
 }
