@@ -4,7 +4,8 @@ import jwt from "jsonwebtoken";
 
 export default class User {
   async signUp(req, res) {
-    if (Users.find({ username: req.body.username })) {
+    console.log(await Users.find({ username: req.body.username }));
+    if (await Users.findOne({ username: req.body.username })) {
       res.status(400);
       throw new Error("The given username already exits!");
     }
