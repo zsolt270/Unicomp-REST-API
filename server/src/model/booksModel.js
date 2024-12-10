@@ -6,7 +6,7 @@ const BooksSchema = new mongoose.Schema(
     author: { type: String, required: "The author is required" },
     genre: { type: String, required: "The genre is required" },
     description: { type: String, required: "The description is required" },
-    avgRating: { type: Number },
+    avgRating: { type: Number, default: 0 },
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Reviews" }],
   },
   {

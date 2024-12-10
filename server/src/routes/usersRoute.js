@@ -6,7 +6,7 @@ import {
 } from "../controllers/validationSchemas/usersValidationSchemas.js";
 import { requestValidator } from "../middleware/requestValidator.js";
 import User from "../controllers/usersController.js";
-import jwtAuthenticator from "../middleware/jwtAuthentucater.js";
+import jwtAuthenticator from "../middleware/jwtAuthenticater.js";
 
 const usersRouter = Router();
 const user = new User();
