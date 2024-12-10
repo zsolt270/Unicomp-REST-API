@@ -21,7 +21,7 @@ booksRouter.post("/", newBookValidation, requestValidator, asyncHandler(book.cre
 
 booksRouter.patch("/:id", updateBookValidation, requestValidator, asyncHandler(book.updateBook));
 
-booksRouter.delete("/:id", asyncHandler());
+booksRouter.delete("/:id", asyncHandler(book.deleteBook));
 
 //Book reviews specific routes
 booksRouter.get("/:bookId/reviews", asyncHandler());

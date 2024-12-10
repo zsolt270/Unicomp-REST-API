@@ -63,4 +63,16 @@ export default class Book {
     res.status(200);
     res.json({ message: "The update was successful!" });
   }
+
+  async deleteBook(req, res) {
+    const deletedBook = await Books.findByIdAndDelete(req.params.id);
+
+    if (!deletedBook) {
+      res.status(404);
+      throw new Error("Book with the given id not found!");
+    }
+
+    res.status(200);
+    res.json({ message: "The book was successfully deleted!" });
+  }
 }
