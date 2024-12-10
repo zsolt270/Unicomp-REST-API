@@ -12,6 +12,7 @@ export default class Review {
     }
 
     const user = await Users.findOne({ username: req.user.uname });
+
     const newReview = await Reviews.create({
       uid: user._id,
       bookid: book._id,

@@ -52,7 +52,7 @@ export default class User {
   }
 
   async getUserDetails(req, res) {
-    const userDetails = await Users.findOne({ username: req.user.uname });
+    const userDetails = await Users.findOne({ username: req.user.uname }).populate("reviews");
 
     if (!userDetails) {
       res.status(500);

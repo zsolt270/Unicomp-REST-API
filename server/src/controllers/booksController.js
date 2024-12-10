@@ -1,4 +1,6 @@
 import Books from "../model/booksModel.js";
+import Reviews from "../model/reviewsModel.js";
+import Users from "../model/usersModel.js";
 
 export default class Book {
   async createBook(req, res) {
@@ -24,7 +26,7 @@ export default class Book {
   }
 
   async getBooks(req, res) {
-    const allBooks = await Books.find();
+    const allBooks = await Books.find().populate("reviews");
 
     if (!allBooks) {
       res.status(500);
@@ -36,7 +38,7 @@ export default class Book {
   }
 
   async getBookById(req, res) {
-    const book = await Books.findOne({ _id: req.params.id });
+    const book = await Books.findOne({ _id: req.params.id }).populate("reviews");
 
     if (!book) {
       res.status(404);
@@ -51,6 +53,11 @@ export default class Book {
     if (await Books.findOne({ title: req.body.title })) {
       res.status(400);
       throw new Error("A book with this name already exists!");
+    }
+
+    if (req.body.avgRating || req.body.reviews) {
+      res.status(400);
+      throw new Error("Cant update the reviews and average score!");
     }
 
     const updatedBook = await Books.findByIdAndUpdate(req.params.id, req.body);
@@ -68,6 +75,25 @@ export default class Book {
     const deletedBook = await Books.findByIdAndDelete(req.params.id);
 
     if (!deletedBook) {
+      res.status(404);
+      throw new Error("Book with the given id not found!");
+    }
+
+    (await Reviews.find({ bookid: req.params.id })).forEach(async (review) => {
+      const deletedUserReviewRef = await Users.findOneAndUpdate(
+        { _id: review.uid },
+        { $pull: { reviews: review._id } }
+      );
+
+      if (!deletedUserReviewRef) {
+        res.status(500);
+        throw new Error("Something went wrong!");
+      }
+    });
+
+    const deletedReviews = await Reviews.deleteMany({ bookid: req.params.id });
+
+    if (!deletedReviews) {
       res.status(404);
       throw new Error("Book with the given id not found!");
     }
