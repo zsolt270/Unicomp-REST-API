@@ -12,7 +12,7 @@ const book = new Book();
 //Books specific routes
 booksRouter.get("/", asyncHandler(book.getBooks));
 
-booksRouter.get("/:id", asyncHandler());
+booksRouter.get("/:id", asyncHandler(book.getBookById));
 
 booksRouter.post("/", newBookValidation, requestValidator, asyncHandler(book.createBook));
 

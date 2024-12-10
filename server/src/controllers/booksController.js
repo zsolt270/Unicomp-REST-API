@@ -34,4 +34,16 @@ export default class Book {
     res.status(200);
     res.json(allBooks);
   }
+
+  async getBookById(req, res) {
+    const book = await Books.findOne({ _id: req.params.id });
+
+    if (!book) {
+      res.status(404);
+      throw new Error("Book with the given id not found!");
+    }
+
+    res.status(200);
+    res.json(book);
+  }
 }
