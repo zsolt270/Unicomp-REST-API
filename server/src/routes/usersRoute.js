@@ -6,6 +6,7 @@ import {
 } from "../controllers/validationSchemas/usersValidationSchemas.js";
 import { requestValidator } from "../middleware/requestValidator.js";
 import User from "../controllers/usersController.js";
+import jwtAuthenticator from "../middleware/jwtAuthentucater.js";
 
 const usersRouter = Router();
 const user = new User();
@@ -14,6 +15,6 @@ usersRouter.post("/", signUpValidation, requestValidator, asyncHandler(user.sign
 
 usersRouter.post("/login", logInValidation, requestValidator, asyncHandler(user.logIn));
 
-usersRouter.get("/me", asyncHandler(user.signUp));
+usersRouter.get("/me", jwtAuthenticator, asyncHandler(user.getUserDetails));
 
 export default usersRouter;

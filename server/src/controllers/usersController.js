@@ -49,4 +49,8 @@ export default class User {
 
     res.status(200).json({ message: "Logged In!", token: accessToken });
   }
+
+  async getUserDetails(req, res) {
+    res.json(req.uname);
+  }
 }
