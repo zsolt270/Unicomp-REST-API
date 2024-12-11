@@ -54,4 +54,55 @@ export default class Review {
     res.status(200);
     res.json(reviews);
   }
+
+  async updateBookReview(req, res) {
+    const review = await Reviews.findOne({ _id: req.params.id });
+    const loggedInUser = await Users.findOne({ username: req.user.uname });
+
+    if (!review) {
+      res.status(404);
+      throw new Error("Review with this id wasn't found!");
+    }
+
+    if (review.uid !== loggedInUser._id) {
+      res.status(403);
+      throw new Error("Dont have to necessary permissions!");
+    }
+
+    if (!req.body.uid && !req.body.bookId) {
+      if (req.body.rating) {
+        const reviewsForCurrBook = await Reviews.find({ bookid: review.bookid });
+        const sumOfRatings =
+          reviewsForCurrBook
+            .map((review) => {
+              return Number(review.rating);
+            })
+            .reduce((prev, curr) => {
+              return prev.rating + curr.rating;
+            }) + req.body.rating;
+
+        const newAvgRating = sumOfRatings / reviewsForCurrBook.length + 1;
+
+        const updatedBook = Books.findByIdAndUpdate(review.bookid, { avgRating: newAvgRating });
+
+        if (!updatedBook) {
+          res.status(500);
+          throw new Error("Something went wrong!");
+        }
+      }
+
+      const updatedReview = await Reviews.findByIdAndUpdate(req.params.id, req.body);
+
+      if (!updatedReview) {
+        res.status(500);
+        throw new Error("Something went wrong!");
+      }
+
+      res.status(200);
+      res.json({ message: "The update was successful!" });
+    } else {
+      res.status(403);
+      throw new Error("Action is prohibited!");
+    }
+  }
 }

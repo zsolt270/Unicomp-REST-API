@@ -14,3 +14,13 @@ export const newReviewValidation = [
     .withMessage("The review must be at least 10 character long!")
     .escape(),
 ];
+
+export const updateReviewValidation = [
+  body("rating").optional().isNumeric().escape(),
+  body("reviewtext")
+    .optional()
+    .isString()
+    .isLength({ min: 10 })
+    .withMessage("The review must be at least 10 character long!")
+    .escape(),
+];

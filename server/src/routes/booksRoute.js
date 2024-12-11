@@ -5,7 +5,10 @@ import {
   newBookValidation,
   updateBookValidation,
 } from "../controllers/validationSchemas/booksValidationSchema.js";
-import { newReviewValidation } from "../controllers/validationSchemas/reviewsValidationSchema.js";
+import {
+  newReviewValidation,
+  updateReviewValidation,
+} from "../controllers/validationSchemas/reviewsValidationSchema.js";
 import { requestValidator } from "../middleware/requestValidator.js";
 import Book from "../controllers/booksController.js";
 import Review from "../controllers/reviewsController.js";
@@ -36,8 +39,14 @@ booksRouter.post(
   asyncHandler(review.newReview)
 );
 
-booksRouter.patch("/reviews/:id", asyncHandler());
+booksRouter.patch(
+  "/reviews/:id",
+  jwtAuthenticator,
+  updateReviewValidation,
+  requestValidator,
+  asyncHandler()
+);
 
-booksRouter.delete("/reviews/:id", asyncHandler());
+booksRouter.delete("/reviews/:id", jwtAuthenticator, asyncHandler());
 
 export default booksRouter;
