@@ -105,4 +105,46 @@ export default class Review {
       throw new Error("Action is prohibited!");
     }
   }
+
+  async deleteBookReview(req, res) {
+    const review = await Reviews.findOne({ _id: req.params.id });
+    const loggedInUser = await Users.findOne({ username: req.user.uname });
+
+    if (!review) {
+      res.status(404);
+      throw new Error("Review with this id wasn't found!");
+    }
+
+    if (review.uid !== loggedInUser._id) {
+      res.status(403);
+      throw new Error("Dont have to necessary permissions!");
+    }
+
+    const deletedReview = await Reviews.findByIdAndDelete(req.params.id);
+
+    if (!deletedReview) {
+      res.status(500);
+      throw new Error("Something went wrong!");
+    }
+
+    const deletedReviewFromBooks = await Books.findOneAndUpdate(
+      { _id: review.bookid },
+      { $pull: { reviews: review._id } }
+    );
+
+    if (!deletedReviewFromBooks) {
+      res.status(500);
+      throw new Error("Something went wrong!");
+    }
+
+    const deletedReviewFromUsers = await Users.findOneAndUpdate(
+      { _id: review.uid },
+      { $pull: { reviews: review._id } }
+    );
+
+    if (!deletedReviewFromUsers) {
+      res.status(500);
+      throw new Error("Something went wrong!");
+    }
+  }
 }

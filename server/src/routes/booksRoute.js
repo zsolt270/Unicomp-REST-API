@@ -47,6 +47,6 @@ booksRouter.patch(
   asyncHandler()
 );
 
-booksRouter.delete("/reviews/:id", jwtAuthenticator, asyncHandler());
+booksRouter.delete("/reviews/:id", jwtAuthenticator, asyncHandler(review.deleteBookReview));
 
 export default booksRouter;
