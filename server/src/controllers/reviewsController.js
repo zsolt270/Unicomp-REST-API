@@ -1,6 +1,7 @@
 import Reviews from "../model/reviewsModel.js";
 import Users from "../model/usersModel.js";
 import Books from "../model/booksModel.js";
+import countAvgRating from "../utils/avgRatingCount.js";
 
 export default class Review {
   async newReview(req, res) {
@@ -34,15 +35,8 @@ export default class Review {
     //calculate avg rating
     const reviewsForCurrBook = await Reviews.find({ bookid: book._id });
 
-    const sumOfRatings = reviewsForCurrBook
-      .map((review) => {
-        return Number(review.rating);
-      })
-      .reduce((prev, curr) => {
-        return prev + curr;
-      });
+    const newAvgRating = countAvgRating(reviewsForCurrBook);
 
-    const newAvgRating = sumOfRatings / reviewsForCurrBook.length;
     const updatedBook = await Books.findByIdAndUpdate(book._id, { avgRating: newAvgRating });
 
     if (!updatedBook) {
@@ -94,15 +88,7 @@ export default class Review {
         //calculate new avg rating
         const reviewsForCurrBook = await Reviews.find({ bookid: review.bookid });
 
-        const sumOfRatings = reviewsForCurrBook
-          .map((review) => {
-            return Number(review.rating);
-          })
-          .reduce((prev, curr) => {
-            return prev + curr;
-          });
-
-        const newAvgRating = sumOfRatings / reviewsForCurrBook.length;
+        const newAvgRating = countAvgRating(reviewsForCurrBook);
 
         //update avg rating for the corresponding book
         const updatedBook = await Books.findByIdAndUpdate(review.bookid, {
@@ -146,15 +132,8 @@ export default class Review {
     // find all the remaining reviews with the coresponding bookid and calculate avg rating
     const reviewsForCurrBook = await Reviews.find({ bookid: review.bookid });
 
-    const sumOfRatings = reviewsForCurrBook
-      .map((review) => {
-        return Number(review.rating);
-      })
-      .reduce((prev, curr) => {
-        return prev + curr;
-      });
+    const newAvgRating = countAvgRating(reviewsForCurrBook);
 
-    const newAvgRating = sumOfRatings / reviewsForCurrBook.length;
     //update the reviews list and the book's avg rating
     const deletedReviewFromBooks = await Books.findOneAndUpdate(
       { _id: review.bookid },
