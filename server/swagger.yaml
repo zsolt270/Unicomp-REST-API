@@ -333,6 +333,8 @@ paths:
   /books/{bookid}/reviews:
     post:
       summary: Create a new Review for the given book
+      security:
+        - jwtAuth: []
       parameters:
         - name: bookId
           in: path
@@ -409,6 +411,8 @@ paths:
   /books/reviews/{id}:
     patch:
       summary: Update a book review
+      security:
+        - jwtAuth: []
       parameters:
         - name: id
           in: path
@@ -460,6 +464,8 @@ paths:
                 example: "Something went wrong"
     delete:
       summary: Delete a review
+      security:
+        - jwtAuth: []
       parameters:
         - name: id
           in: path
