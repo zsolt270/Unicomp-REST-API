@@ -1,0 +1,499 @@
+openapi: 3.0.0
+info:
+  title: Felvételi feladat- Jun / Med szoftverfejlesztő
+  description: "Egy REST API, amely lehetővé teszi  a felhasználók számára,
+    hogy könyveket és azokhoz kapcsolódó review-kat kezeljenek."
+  version: 1.0.0
+components:
+  securitySchemes:
+    jwtAuth:
+      type: "http"
+      scheme: "bearer"
+      bearerFormat: "JWT"
+  security:
+    - jwtAuth: []
+paths:
+  /users:
+    post:
+      summary: Registers the user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userName:
+                  type: string
+                  example: "somebody123"
+                email:
+                  type: string
+                  example: "somebody123@gmail.com"
+                password:
+                  type: string
+                  example: "Password123*"
+                confirmPassword:
+                  type: string
+                  example: "Password123*"
+      responses:
+        201:
+          description: "Successful registration"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "The registration was successful!"
+        400:
+          description: "Error with the given registration data"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "The given username already exists"
+        500:
+          description: "Server error"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Something went wrong!"
+  /users/login:
+    post:
+      summary: Logs in the user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userName:
+                  type: string
+                  example: "somebody123"
+                password:
+                  type: string
+                  example: "Password123*"
+      responses:
+        200:
+          description: "Successful login and give back a token"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Logged in!"
+                  token:
+                    type: string
+        404:
+          description: "The given username wasn't found"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Username wasn't found"
+        401:
+          description: "The given and stored passwords are not matching."
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Not Allowed!"
+  /users/me:
+    get:
+      summary: Show the user details
+      security:
+        - jwtAuth: []
+      responses:
+        200:
+          description: "Gives back the details about the user"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                    example: "somebody123"
+                  email:
+                    type: string
+                    example: "something@gmail.com"
+                  password:
+                    type: string
+                    exmaple: "*Something123"
+                  reviews:
+                    type: array
+        500:
+          description: "Server error"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Something went wrong!"
+  /books:
+    post:
+      summary: Create a new book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "The book title"
+                author:
+                  type: string
+                  example: "Somebody"
+                genre:
+                  type: string
+                  example: "Fantasy"
+                description:
+                  type: string
+                  example: "This is a description about the book"
+      responses:
+        201:
+          description: "Create a new book"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "A new book was created!"
+        400:
+          description: "Client input error"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "The given book already exists"
+        500:
+          description: "Server error"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Something went wrong"
+    get:
+      summary: Get all of the books and their details
+      responses:
+        200:
+          description: "Gives back the details of the books"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                    type: string
+                    example: "Title of the book"
+                  author:
+                    type: string
+                    example: "Somebody"
+                  genre:
+                    type: string
+                    exmaple: "Fantasy"
+                  description:
+                    type: string
+                    example: "This is a description about the book"
+                  avgRating:
+                    type: number
+                    example: 4
+        500:
+          description: "Server error"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Something went wrong"
+  /books/{id}:
+    get:
+      summary: Get a book and it's details by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the book.
+          schema:
+            type: string
+            example: 6758c931863640ba0388b48e
+      responses:
+        200:
+          description: "Gives back the details of the book"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                    type: string
+                    example: "Title of the book"
+                  author:
+                    type: string
+                    example: "Somebody"
+                  genre:
+                    type: string
+                    exmaple: "Fantasy"
+                  description:
+                    type: string
+                    example: "This is a description about the book"
+                  avgRating:
+                    type: number
+                    example: 4
+        404:
+          description: "Book with the given id not existing."
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Book with the given id not found!"
+    patch:
+      summary: Update a book
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the book.
+          schema:
+            type: string
+            example: 6758c931863640ba0388b48e
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "The book title"
+                author:
+                  type: string
+                  example: "Somebody"
+                genre:
+                  type: string
+                  example: "Fantasy"
+                description:
+                  type: string
+                  example: "This is a description about the book"
+      responses:
+        200:
+          description: "Update the book details"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "The update was successful!"
+        400:
+          description: "Client input error"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "A book with this name already exists!"
+        404:
+          description: "Book with the given id not existing."
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Book with the given id not found!"
+    delete:
+      summary: Delete a book
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the book.
+          schema:
+            type: string
+            example: 6758c931863640ba0388b48e
+      responses:
+        200:
+          description: "Delete a book"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "The book was successfully deleted!"
+        404:
+          description: "Book with the given id not existing."
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Book with the given id not found!"
+        500:
+          description: "Server error"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Something went wrong"
+  /books/{bookid}/reviews:
+    post:
+      summary: Create a new Review for the given book
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          description: The ID of the book.
+          schema:
+            type: string
+            example: 6758c931863640ba0388b48e
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+              rating:
+                type: string
+                example: "4"
+              reviewtext:
+                type: string
+                example: "This book was amazing!"
+      responses:
+        201:
+          description: "New review created"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Review was successfully created!"
+        404:
+          description: "Book with the given id not existing."
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "There wasn't a book with the given id!"
+        500:
+          description: "Server error"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Something went wrong"
+    get:
+      summary: Get the reviews for the specified book
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          description: The ID of the book.
+          schema:
+            type: string
+            example: 6758c931863640ba0388b48e
+      responses:
+        200:
+          description: "Gives back the details of the book"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rating:
+                    type: string
+                    example: "The rating for the book"
+                  reviewtext:
+                    type: string
+                    example: "This is a review for the book"
+        404:
+          description: "Book with the given id not existing."
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Book with the given id not found!"
+  /books/reviews/{id}:
+    patch:
+      summary: Update a book review
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the review.
+          schema:
+            type: string
+            example: 6758c931863640ba0388b48e
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: string
+                  example: "4"
+                reviewtext:
+                  type: string
+                  example: "This book was amazing!"
+      responses:
+        200:
+          description: "Update the review details"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "The update was successful!"
+        403:
+          description: "The user not matching with the review creater"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Dont have the necessary permissions!"
+        404:
+          description: "Review with the given id not existing."
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Review with this id wasn't found!"
+        500:
+          description: "Server error"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Something went wrong"
+    delete:
+      summary: Delete a review
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the review.
+          schema:
+            type: string
+            example: 6758c931863640ba0388b48e
+      responses:
+        200:
+          description: "Delete a review"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "The review was successfully deleted!"
+        403:
+          description: "The user not matching with the review creater"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Dont have the necessary permissions!"
+        404:
+          description: "Review with the given id not existing."
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Review with the given id not found!"
+        500:
+          description: "Server error"
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Something went wrong"
