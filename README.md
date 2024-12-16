@@ -28,6 +28,7 @@ PRIVATE_JWT_KEY = <private jwt key>
 ```
 6. Szerver elindítása:
 ```
+cd server/
 npm run start
 ```
 7. A swagger dokumentáció eléréséhez:
