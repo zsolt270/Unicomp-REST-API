@@ -20,7 +20,7 @@ npm i
 //Például CLI-on belül
 require('crypto').randomBytes(64).toString('hex')
 ```
-5. .env file készítése az alábbiakkal:
+5. .env file készítése, server mappán belül az alábbiakkal:
 ```
 PORT = <port number>
 DB_CONNECTION_STRING = mongodb+srv://dev:<db_password>@<db_name>.qpdrdfz.mongodb.net/?retryWrites=true&w=majority&appName=<db_name>
