@@ -23,7 +23,7 @@ paths:
             schema:
               type: object
               properties:
-                userName:
+                username:
                   type: string
                   example: "somebody123"
                 email:
@@ -67,7 +67,7 @@ paths:
             schema:
               type: object
               properties:
-                userName:
+                username:
                   type: string
                   example: "somebody123"
                 password:
