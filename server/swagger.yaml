@@ -330,7 +330,7 @@ paths:
               schema:
                 type: string
                 example: "Something went wrong"
-  /books/{bookid}/reviews:
+  /books/{bookId}/reviews:
     post:
       summary: Create a new Review for the given book
       security:
@@ -344,17 +344,18 @@ paths:
             type: string
             example: 6758c931863640ba0388b48e
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
               properties:
-              rating:
-                type: string
-                example: "4"
-              reviewtext:
-                type: string
-                example: "This book was amazing!"
+                rating:
+                  type: string
+                  example: "4"
+                reviewtext:
+                  type: string
+                  example: "This book was amazing!"
       responses:
         201:
           description: "New review created"
